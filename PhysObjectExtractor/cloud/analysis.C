@@ -19,6 +19,7 @@ TFile fout("analysis_output.root","recreate");
 // And we will declare two histograms 
 TH1F h1("h1","electron pT (GeV/c)",50,0,150);
 TH1F h2("h2","muon pT (GeV/c)",50,0,150);
+TH1F h3("h3","muon eta",50,-5,5);
 
 // Now we need a few variables to hold the data we'll extract from 
 // the input ROOT file.
@@ -33,6 +34,7 @@ Int_t nmuon; // Necessary to keep track of the number of muons
 //Float_t mu_pt[16];
 std::vector<float> *el_pt=0;
 std::vector<float> *mu_pt=0;
+std::vector<float> *mu_eta=0;
 
 // Assign these variables to specific branch addresses
 tree_el->SetBranchAddress("numberelectron",&nelectron);
@@ -40,6 +42,7 @@ tree_el->SetBranchAddress("electron_pt",&el_pt);
 
 tree_mu->SetBranchAddress("numbermuon",&nmuon);
 tree_mu->SetBranchAddress("muon_pt",&mu_pt);
+tree_eta->SetBranchAddress("muon_eta",&mu_eta);
 
 // Get the number of events in the file
 Int_t nevents_el = tree_el->GetEntries();
@@ -98,6 +101,8 @@ for (Int_t i=0;i<nevents;i++) {
         //printf("Event %d: muon %d     %f\n", i, j,mu_pt->at(j)); // For debugging
         // Fill the histogram with each value of pT
         h2.Fill(mu_pt->at(j));
+        h3.Fill(mu_eta->at(j));
+
     }
 
 }
@@ -105,6 +110,7 @@ for (Int_t i=0;i<nevents;i++) {
   // Declare a TCanvas
   TCanvas *c1 = new TCanvas("c1", "Electrons", 800, 400);
   TCanvas *c2 = new TCanvas("c2", "Muons", 800, 400);
+  TCanvas *c3 = new TCanvas("c3", "Muons eta", 800, 400);
 
   c1->cd(0);
   h1.Draw();
@@ -113,6 +119,10 @@ for (Int_t i=0;i<nevents;i++) {
   c2->cd(0);
   h2.Draw();
   c2->SaveAs("h_mu_pt.png");
+
+  c3->cd(0);
+  h3.Draw();
+  c3->SaveAs("h_mu_eta.png");
 
   fout.cd();
   h1.Write();
