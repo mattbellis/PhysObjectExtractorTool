@@ -42,7 +42,7 @@ tree_el->SetBranchAddress("electron_pt",&el_pt);
 
 tree_mu->SetBranchAddress("numbermuon",&nmuon);
 tree_mu->SetBranchAddress("muon_pt",&mu_pt);
-tree_eta->SetBranchAddress("muon_eta",&mu_eta);
+tree_mu->SetBranchAddress("muon_eta",&mu_eta);
 
 // Get the number of events in the file
 Int_t nevents_el = tree_el->GetEntries();
